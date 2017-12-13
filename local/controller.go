@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -63,41 +63,40 @@ func forgot(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func searchRecordsByOrganismName(w http.ResponseWriter, r *http.Request) {
-	loginStatus := verifyLoginStatus(r)
-	if loginStatus == true {
-		if r.Method == "POST" {
-			r.ParseForm()
-			organismName := r.FormValue("organismname")
-			fmt.Println(organismName)
-		}
-	}
-}
-
-func searchRecordsByCategory(w http.ResponseWriter, r *http.Request) {
-	loginStatus := verifyLoginStatus(r)
-	if loginStatus == true {
-		if r.Method == "POST" {
-			r.ParseForm()
-		}
-	}
-}
-
-func searchRecordsByLocation(w http.ResponseWriter, r *http.Request) {
-	loginStatus := verifyLoginStatus(r)
-	if loginStatus == true {
-		if r.Method == "POST" {
-			r.ParseForm()
-		}
-	}
-}
-
-func searchRecordsBySeason(w http.ResponseWriter, r *http.Request) {
-	loginStatus := verifyLoginStatus(r)
-	if loginStatus == true {
-		if r.Method == "POST" {
-			r.ParseForm()
-		}
+func searchRecordsByKeyword(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	searchtype := r.FormValue("searchtype")
+	keyword := r.FormValue("keyword")
+	switch searchtype {
+	case "organismname":
+		records := searchRecordsByOrganismName(keyword)
+		b, _ := json.Marshal(records)
+		w.Write(b)
+	case "category":
+		records := searchRecordsByCategory(keyword)
+		b, _ := json.Marshal(records)
+		w.Write(b)
+	case "locationname":
+		records := searchRecordsByLocationName(keyword)
+		b, _ := json.Marshal(records)
+		w.Write(b)
+	case "gps":
+		longitude := r.FormValue("longitude")
+		latitude := r.FormValue("latitude")
+		records := searchRecordsByGPS(longitude, latitude)
+		b, _ := json.Marshal(records)
+		w.Write(b)
+	case "season":
+		records := searchRecordsBySeason(keyword)
+		b, _ := json.Marshal(records)
+		w.Write(b)
+	case "daterange":
+		datefrom := r.FormValue("datefrom")
+		dateto := r.FormValue("dateto")
+		records := searchRecordsByDateRange(datefrom, dateto)
+		fmt.Println(records)
+		b, _ := json.Marshal(records)
+		w.Write(b)
 	}
 }
 
@@ -112,7 +111,6 @@ func searchRecordByRecordID(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
 
 func uploadRecord(w http.ResponseWriter, r *http.Request) {
 	loginStatus := verifyLoginStatus(r)
@@ -157,7 +155,7 @@ func uploadRecordPhotosByRecordID(w http.ResponseWriter, r *http.Request) {
 						uploadOK := addPhotosToRecordByRecordID(r, UID)
 						if uploadOK == true {
 							successUpload = true
-						}	
+						}
 					}
 				}
 			}
@@ -174,22 +172,22 @@ func updateRecordByRecordID(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			successUpdate := false
 			/*
-			cu, _ := r.Cookie("username")
-			unFormatOK := filterUsername(cu.Value)
-			if unFormatOK == true {
-				UID, getUIDOK := getUIDByUsername(cu.Value)
-				catchFalse(getUIDOK, "get uid by username err")
-				storeDescribeOK, recordID := storeRecord(UID, r)
-				photoQuantity := len(r.MultipartForm.File["photos"])
-				if storeDescribeOK == true && photoQuantity == 0 {
-					successUpdate = true
-				} else if storeDescribeOK == true && photoQuantity != 0 {
-					storePhotoOK := storeRecordPhoto(r, UID, recordID)
-					if storePhotoOK == true {
+				cu, _ := r.Cookie("username")
+				unFormatOK := filterUsername(cu.Value)
+				if unFormatOK == true {
+					UID, getUIDOK := getUIDByUsername(cu.Value)
+					catchFalse(getUIDOK, "get uid by username err")
+					storeDescribeOK, recordID := storeRecord(UID, r)
+					photoQuantity := len(r.MultipartForm.File["photos"])
+					if storeDescribeOK == true && photoQuantity == 0 {
 						successUpdate = true
+					} else if storeDescribeOK == true && photoQuantity != 0 {
+						storePhotoOK := storeRecordPhoto(r, UID, recordID)
+						if storePhotoOK == true {
+							successUpdate = true
+						}
 					}
 				}
-			}
 			*/
 			successUpdate = alterRecordByRecordID(r)
 
@@ -198,11 +196,11 @@ func updateRecordByRecordID(w http.ResponseWriter, r *http.Request) {
 			w.Write(b)
 		}
 	}
-}	
+}
 
 //舊的刪除 上傳新的 綁新的
 func updateRecordPhotosByRecordID() {
-	
+
 }
 
 func deleteRecordByRecordID(w http.ResponseWriter, r *http.Request) {
@@ -217,9 +215,8 @@ func deleteRecordByRecordID(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteRecordPhotosByPhotoID() {
-	
+
 }
-	
 
 func parseCoordinateString(val string) float64 {
 	chunks := strings.Split(val, ",")

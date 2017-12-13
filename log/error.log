@@ -21,3 +21,17 @@
 [Error] 2017/12/12 21:32:25 error.go:7: store ecology err
 [Error] 2017/12/12 21:51:23 error.go:7: store ecology err
 [Error] 2017/12/13 12:34:28 error.go:7: ListenAndServe err
+[Error] 2017/12/13 22:42:55 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 22:42:55 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 22:59:58 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 22:59:58 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:00:37 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:00:37 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:00:37 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:00:46 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:01:05 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:01:38 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:07:34 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:10:53 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:14:12 error.go:7: query organis id from comment with mysql error
+[Error] 2017/12/13 23:14:37 error.go:7: query organis id from comment with mysql error

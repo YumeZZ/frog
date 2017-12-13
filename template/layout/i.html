@@ -10,10 +10,34 @@
     </head>
     <body>
         <div class="container">
+            <div class="top"></div>
+            <div class="main">
+                <div class="search">                    
+                    
+                    <div class="search-container">
+                        <form action="/search-records-by-keyword" id="search-form">
+                            <input type="text" placeholder="Search..." name="keyword">
+                            <label for="datefrom" id="datefrom-label" class="display-none">開始日期</label>
+                            <input type="date" name="datefrom" class="display-none">
+                            <label for="dateto" id="dateto-label" class="display-none">結束日期</label>
+                            <input type="date" name="dateto" class="display-none">
+                            <input type="text" name="searchtype" class="display-none" value="organismname">
+                            <button type="submit"><img src="/resource/ionicons/ionicons-2.0.1/png/512/search.png"></button>
+                            <button type="button" id="searchtype-organismname">物種</button>
+                            <button type="button" id="searchtype-category">類別</button>
+                            <button type="button" id="searchtype-location">地點</button>
+                            <button type="button" id="searchtype-gps">座標</button>
+                            <button type="button" id="searchtype-season">季節</button>
+                            <button type="button" id="searchtype-daterange">日期</button>
+                        </form>
+                    </div>
 
+                </div>
+            </div>
         </div>
         <!-- container end-->
         
-        <script src="/public/javascript/i/form.js"></script>        
+        <script src="/public/javascript/i/form.js"></script>
+        
     </body>
 </html>

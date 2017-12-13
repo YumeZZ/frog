@@ -8,40 +8,45 @@ type Coordinate struct {
 	Longitude float64
 }
 
+// LoginPage .
 type LoginPage struct {
 	LoginStatus  bool
 	LoginProblem string
 }
 
+// PrivateIndex .
 type PrivateIndex struct {
-	Username          string
-	UserID            int
+	Username string
+	UserID   int
 }
 
+// UploadPage .
 type UploadPage struct {
 	UploadStatus bool
 }
 
+// Record .
 type Record struct {
-	ID int
-	Name string
+	ID       int
+	Name     string
 	ISAnimal bool
-	Kingdom string
-	Phylum string
-	Class string
-	Order string
-	Family string
-	Genus string
-	Species string
-	Food string
-	Stage string
-	Season string
-	Note string
-	Habitat string
-	Photo map[int]string // index, photo path
+	Kingdom  string
+	Phylum   string
+	Class    string
+	Order    string
+	Family   string
+	Genus    string
+	Species  string
+	Food     string
+	Stage    string
+	Season   string
+	Note     string
+	Habitat  string
+	Photo    map[int]string // index, photo path
 }
 
-type Gallery struct {
+// Records .
+type Records struct {
 	Records map[int]Record
 }
 

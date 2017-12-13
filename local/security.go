@@ -4,6 +4,15 @@ import (
 	"regexp"
 )
 
+func isEnglish(str string) bool {
+	isEnglish := false
+	match, _ := regexp.MatchString(`^[a-zA-Z]+$`, str)
+	if match == true {
+		isEnglish = true
+	}
+	return isEnglish
+}
+
 func filterEmail(e string) bool {
 	formatOK := false
 	match, _ := regexp.MatchString(`^[a-zA-Z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`, e)

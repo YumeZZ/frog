@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -73,13 +72,8 @@ func initCategoryPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func initGalleryPage(w http.ResponseWriter, r *http.Request) {
-	keyword := r.URL.Path[6 : len(r.URL.Path)-1]
-	//fmt.Println(keyword)
-
-	//要以相簿為單位丟json吧 這可難辦了ＱＱ
-	Gallery := searchGalleryByOrganismName(keyword)
-	fmt.Println(Gallery)
-	renderTemplate(w, "gallery.html", Gallery)
+	//keyword := r.URL.Path[6 : len(r.URL.Path)-1]
+	//renderTemplate(w, "gallery.html", nil)
 }
 
 func initTestPage(w http.ResponseWriter, r *http.Request) {
