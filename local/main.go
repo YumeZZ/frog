@@ -52,9 +52,10 @@ func main() {
 	mux.HandleFunc("/requestlogin", login)
 	mux.HandleFunc("/logout", logout)
 
-	mux.HandleFunc("/upload-organism", uploadOrganism)
-	mux.HandleFunc("/search-organism", searchOrganism)
-	mux.HandleFunc("/search-category", searchCategory)
+	mux.HandleFunc("/upload-record", uploadRecord)
+	mux.HandleFunc("/search-records-by-organism-name", searchRecordsByOrganismName)
+	mux.HandleFunc("/search-records-by-category", searchRecordsByCategory)
+	mux.HandleFunc("/search-record-by-record-id", searchRecordByRecordID)	
 
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir(frogConfig.PublicPath))))
 	mux.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir(frogConfig.ResourcePath))))

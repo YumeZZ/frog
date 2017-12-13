@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -65,7 +65,7 @@ func forgot(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func uploadRecord(w http.ResponseWriter, r *http.Request) {
+func uploadOrganism(w http.ResponseWriter, r *http.Request) {
 	loginStatus := verifyLoginStatus(r)
 	if loginStatus == true {
 		if r.Method == "POST" {
@@ -75,12 +75,12 @@ func uploadRecord(w http.ResponseWriter, r *http.Request) {
 			if unFormatOK == true {
 				UID, getUIDOK := getUIDByUsername(cu.Value)
 				catchFalse(getUIDOK, "get uid by username err")
-				storeDescribeOK, ecologyID := storeRecord(UID, r)
+				storeDescribeOK, ecologyID := storeEcology(UID, r)
 				photoQuantity := len(r.MultipartForm.File["photos"])
 				if storeDescribeOK == true && photoQuantity == 0 {
 					successUpload = true
 				} else if storeDescribeOK == true && photoQuantity != 0 {
-					storePhotoOK := storeRecordPhoto(r, UID, ecologyID)
+					storePhotoOK := storeEcologyPhoto(r, UID, ecologyID)
 					if storePhotoOK == true {
 						successUpload = true
 					}
@@ -93,7 +93,7 @@ func uploadRecord(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func searchRecordsByOrganismName(w http.ResponseWriter, r *http.Request) {
+func searchOrganism(w http.ResponseWriter, r *http.Request) {
 	loginStatus := verifyLoginStatus(r)
 	if loginStatus == true {
 		if r.Method == "POST" {
@@ -104,33 +104,15 @@ func searchRecordsByOrganismName(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func searchRecordsByCategory(w http.ResponseWriter, r *http.Request) {
+func searchCategory(w http.ResponseWriter, r *http.Request) {
 	loginStatus := verifyLoginStatus(r)
 	if loginStatus == true {
 		if r.Method == "POST" {
 			r.ParseForm()
+			// ajax return json change category.html
+			// w.write
 		}
 	}
-}
-
-func searchRecordByRecordID(w http.ResponseWriter, r *http.Request) {
-	loginStatus := verifyLoginStatus(r)
-	if loginStatus == true {
-		if r.Method == "POST" {
-			r.ParseForm()
-			record := getRecordByRecordID(r.Form.Get("recordid"))
-
-			w.Write()
-		}
-	}
-}
-
-func updateRecordByRecordID() {
-	
-}	
-
-func deleteRecordByRecordID() {
-
 }
 
 func parseCoordinateString(val string) float64 {

@@ -15,7 +15,7 @@ type UploadPage struct {
 	UploadStatus bool
 }
 
-type Record struct {
+type Organism struct {
 	ID int
 	Name string
 	ISAnimal bool
@@ -35,5 +35,5 @@ type Record struct {
 }
 
 type Gallery struct {
-	Records map[int]Record
+	Records map[int]Organism
 }
