@@ -1,0 +1,110 @@
+People:
+104213005 楊貽婷 blacksheep104213005 （前端、頁）
+104213011 林筱芙 bettysmilehahaha （前端，頁）
+104213012 鄭舜文 yooAShun （前端，頁）
+104213027 黃奕柔 IJouu （前端，頁）
+104213046 李禹叡 hbdoy （統包）
+104213052 鍾家蓉 YumeZZ （前端，頁）
+104213054 劉宇軒 importfmt （後端）
+104213081 陳毅 YeeYeeChen（前端，頁）
+104213083 王俊傑 TMineCola（統包）
+104213666 不存在 Money（金主）
+
+Purpose:
+生態記錄
+
+Feature:
+上傳生態資料（名稱、年齡、發現季節、出沒時間、出沒地點、食物鏈、照片、GPS）
+瀏覽生態資料（名稱、年齡、發現季節、出沒時間、出沒地點、食物鏈、照片、GPS）
+關鍵字搜索（應該沒時間）
+聊天機器人（應該沒時間）
+批量下載（應該沒時間）
+備份機制（應該沒時間）
+響應式（看前端心情）
+
+Template:
+http://127.0.0.1/ index.html
+http://127.0.0.1/register register.html
+http://127.0.0.1/login login.html
+http://127.0.0.1/upload upload.html
+http://127.0.0.1/category category.html
+
+Uniform Resource Locator:
+http://127.0.0.1/
+http://127.0.0.1/register
+http://127.0.0.1/login
+http://127.0.0.1/upload
+http://127.0.0.1/category
+http://127.0.0.1/forgot
+http://127.0.0.1/console
+http://127.0.0.1/test
+
+http://importfmt.blog/ (瀏覽生態資料的頁面)
+http://importfmt.blog/register (註冊頁)
+http://importfmt.blog/login (登入頁)
+http://importfmt.blog/upload（上傳生態資料的頁面）
+http://importfmt.blog/forgot (忘記帳密等，復原機制，有時間再說)
+http://importfmt.blog/console (主控台，有時間再說)
+http://importfmt.blog/test (測試用，日後移除)
+
+Form Application Programming Interface:
+http://importfmt.blog/requestregister （前端用這個網址傳註冊表單）
+http://importfmt.blog/requestlogin（前端用這個網址傳登入表單）
+http://importfmt.blog/requestforgot（前端用這個網址傳忘記帳密表單）
+http://importfmt.blog/upload（前端用這個網址傳生態表單）
+http://importfmt.blog/logout（前端用這個網址嵌登出連結）
+
+Directory structure:
+app（上線原始碼）
+config（配置檔）
+local（本地原始碼）
+log（日誌檔）
+note（筆記）
+public（CSS, Javascript）
+resource（jQuery）
+storage（photo, video）
+template（html）
+
+Language:
+Structured Query Language (SQL)
+Hypertext Markup Language (HTML)
+Cascading Style Sheets (CSS)
+Javascript and jQuery
+PHP
+Go
+
+Database:
+MySQL
+Redis
+
+Database structure:
+frog (database)
+userinfo (table)
+ecology (table)
+photo (table)
+
+Merge:
+某A輸入99行時，99行為空，當某A在99行輸入了一些資料後，進行 push ，發生衝突，無法 push
+原因在於某A push 99行之前，某B已經 push 了99行
+由於某A在某B提交後尚未 pull 最新的程式，所以某A誤以為99行為空
+假設公司允許某A透過merge解決衝突，那麼某A此刻需 pull 下載最新的程式碼
+通常版本控制系統會提示 Confilct，由某A決定是否須自動merge
+某A可在 pull 後，調整包含某B及某A輸入資料的的混合檔案
+調整後再 push
+
+https://backlog.com/git-tutorial/tw/intro/intro6_1.html
+https://backlog.com/git-tutorial/tw/intro/intro6_2.html
+
+Tutorial:
+HTML/CSS http://www.w3school.com.cn/h.asp
+CSS https://www.1keydata.com/css-tutorial/tw/
+CSS http://zh-tw.learnlayout.com/
+Javascript http://javascript.ruanyifeng.com/
+Javascript https://www.w3schools.com/js/default.asp
+jQuery http://api.jquery.com/
+jQuery https://www.jquery123.com/
+jQuery https://www.fooish.com/jquery/
+Git https://zlargon.gitbooks.io/git-tutorial/content/
+Git https://backlog.com/git-tutorial/tw/
+PHP 自力救濟
+Go  同上

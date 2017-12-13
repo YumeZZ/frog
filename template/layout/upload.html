@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Upload</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/public/css/upload.css">
+        <script src="/resource/jquery/jquery-3.2.1.min.js"></script>
+    <!--
+        <meta name="keywords" content="???" />
+        <meta name="description" content="???" />
+        <meta property="og:title" content="???" />
+        <meta property="og:url" content="???" />
+    -->
+    </head>
+    <body>
+        <div class="container">
+            <div class="top">
+                
+            </div>
+            <!-- top end -->
+
+            <div class="main">
+                
+                <div class="left">
+                
+                </div>
+                <!-- left end -->
+
+                <div class="center">
+                    <div class="upload">
+                        <form action="/upload-organism" method="post" class="upload-form" id="upload-form">
+                            
+                            <div class="input-box">
+                                
+                                <div class="choose-media-box">
+
+                                    <label for="name">學名</label>
+                                    <input type="text" id="organismname" name="organismname"><br/>
+
+                                    <!--
+                                    <label for="kingdom">界</label>
+                                    <input type="text" id="kingdom" name="kingdom">
+
+                                    <label for="phylum">門</label>
+                                    <input type="text" id="phylum" name="phylum">
+
+                                    <label for="class">綱</label>
+                                    <input type="text" id="class" name="class">
+
+                                    <label for="order">目</label>
+                                    <input type="text" id="order" name="order">
+
+                                    <label for="family">科</label>
+                                    <input type="text" id="family" name="family">
+                                    
+                                    <label for="genus">屬</label>
+                                    <input type="text" id="genus" name="genus">
+
+                                    <label for="species">種</label>
+                                    <input type="text" id="species" name="species">
+                                    -->
+                                    
+                                    性狀簡述<br/>
+                                    <textarea name="note"></textarea><br/>
+                                    
+                                    棲地<br/>
+                                    <textarea name="habitat"></textarea><br/>
+                                    
+                                    <label class="upload-label" id="choose-photo" for="photos">
+                                        <img src="/resource/ionicons/ionicons-2.0.1/src/images.svg">
+                                        <input type="file"  class="none-display" id="photos" name="photos"  accept=".jpg, .jpeg, .png" multiple="multiple">
+                                        <!-- need add onchange previewImage event-->
+                                    </label>
+                                    
+                                </div>
+                                
+                                <div class="submit-box">
+                                    <button type="submit" class="gogogo" id="gogogo" name="gogogo">Submit</button>
+                                </div>
+                                
+                            </div>
+                            
+                            <div id="preview-photo-div"></div>
+
+                        </form>
+                    </div>
+                    <!-- upload end -->
+                </div>
+                <!-- center end -->
+
+                <div class="right">
+                
+                </div>
+                <!-- right end -->
+                
+            </div>
+            <!-- main end -->
+
+        </div>
+        <!-- container end -->
+        
+        <script src="/public/javascript/upload/upload.js"></script>
+        
+    </body>
+</html>
