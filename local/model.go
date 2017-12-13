@@ -297,7 +297,6 @@ func searchRecordsBySeason(season string) Records {
 	return records
 }
 
-// 要測
 func searchRecordsByDateRange(dateFrom, dateTo string) Records {
 	fmt.Println(dateFrom, dateTo)
 	recordIDs, records := []int{}, Records{}

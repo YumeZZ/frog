@@ -31,14 +31,19 @@ $("#search-form").submit(function(e) {
     e.preventDefault();
     var formURL = $(this).attr("action");
     var formData = $(this).serializeArray();
-    console.log(formData);
+    //console.log(formData);
     $.ajax({
         url : formURL,
         type: "POST",
         data : formData,
         success:function(data, textStatus, jqXHR) {
-            console.log("post ajax search success");
-            //var result = $.parseJSON(data);
+            var result = $.parseJSON(data);
+            //console.log(result.Records);
+            
+            jQuery.each(result.Records, function(i, val) {
+                console.log(i, val);
+            });
+            
             //$(location).attr('href', '/');
         },
         error: function(jqXHR, textStatus, errorThrown) {
