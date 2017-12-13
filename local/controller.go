@@ -45,8 +45,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 				if ok == true {
 					storeSession(w, r, loginField, pw)
 					loginStatus = true
-				} else {
-
 				}
 			}
 		}
@@ -63,34 +61,6 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 func forgot(w http.ResponseWriter, r *http.Request) {
 
-}
-
-func uploadRecord(w http.ResponseWriter, r *http.Request) {
-	loginStatus := verifyLoginStatus(r)
-	if loginStatus == true {
-		if r.Method == "POST" {
-			successUpload := false
-			cu, _ := r.Cookie("username")
-			unFormatOK := filterUsername(cu.Value)
-			if unFormatOK == true {
-				UID, getUIDOK := getUIDByUsername(cu.Value)
-				catchFalse(getUIDOK, "get uid by username err")
-				storeDescribeOK, ecologyID := storeRecord(UID, r)
-				photoQuantity := len(r.MultipartForm.File["photos"])
-				if storeDescribeOK == true && photoQuantity == 0 {
-					successUpload = true
-				} else if storeDescribeOK == true && photoQuantity != 0 {
-					storePhotoOK := storeRecordPhoto(r, UID, ecologyID)
-					if storePhotoOK == true {
-						successUpload = true
-					}
-				}
-			}
-			p := UploadPage{UploadStatus: successUpload}
-			b, _ := json.Marshal(p)
-			w.Write(b)
-		}
-	}
 }
 
 func searchRecordsByOrganismName(w http.ResponseWriter, r *http.Request) {
@@ -113,25 +83,143 @@ func searchRecordsByCategory(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func searchRecordsByLocation(w http.ResponseWriter, r *http.Request) {
+	loginStatus := verifyLoginStatus(r)
+	if loginStatus == true {
+		if r.Method == "POST" {
+			r.ParseForm()
+		}
+	}
+}
+
+func searchRecordsBySeason(w http.ResponseWriter, r *http.Request) {
+	loginStatus := verifyLoginStatus(r)
+	if loginStatus == true {
+		if r.Method == "POST" {
+			r.ParseForm()
+		}
+	}
+}
+
 func searchRecordByRecordID(w http.ResponseWriter, r *http.Request) {
 	loginStatus := verifyLoginStatus(r)
 	if loginStatus == true {
 		if r.Method == "POST" {
 			r.ParseForm()
 			record := getRecordByRecordID(r.Form.Get("recordid"))
-
-			w.Write()
+			b, _ := json.Marshal(record)
+			w.Write(b)
 		}
 	}
 }
 
-func updateRecordByRecordID() {
-	
+
+func uploadRecord(w http.ResponseWriter, r *http.Request) {
+	loginStatus := verifyLoginStatus(r)
+	if loginStatus == true {
+		if r.Method == "POST" {
+			successUpload := false
+			cu, _ := r.Cookie("username")
+			unFormatOK := filterUsername(cu.Value)
+			if unFormatOK == true {
+				UID, getUIDOK := getUIDByUsername(cu.Value)
+				catchFalse(getUIDOK, "get uid by username err")
+				storeDescribeOK, recordID := storeRecord(UID, r)
+				photoQuantity := len(r.MultipartForm.File["photos"])
+				if storeDescribeOK == true && photoQuantity == 0 {
+					successUpload = true
+				} else if storeDescribeOK == true && photoQuantity != 0 {
+					storePhotoOK := storeRecordPhoto(r, UID, recordID)
+					if storePhotoOK == true {
+						successUpload = true
+					}
+				}
+			}
+			p := UploadPage{UploadStatus: successUpload}
+			b, _ := json.Marshal(p)
+			w.Write(b)
+		}
+	}
+}
+
+func uploadRecordPhotosByRecordID(w http.ResponseWriter, r *http.Request) {
+	loginStatus := verifyLoginStatus(r)
+	if loginStatus == true {
+		if r.Method == "POST" {
+			successUpload := false
+			photoQuantity := len(r.MultipartForm.File["photos"])
+			if photoQuantity != 0 {
+				cu, _ := r.Cookie("username")
+				unFormatOK := filterUsername(cu.Value)
+				if unFormatOK == true {
+					UID, getUIDOK := getUIDByUsername(cu.Value)
+					if getUIDOK == true {
+						uploadOK := addPhotosToRecordByRecordID(r, UID)
+						if uploadOK == true {
+							successUpload = true
+						}	
+					}
+				}
+			}
+			p := UploadPage{UploadStatus: successUpload}
+			b, _ := json.Marshal(p)
+			w.Write(b)
+		}
+	}
+}
+
+func updateRecordByRecordID(w http.ResponseWriter, r *http.Request) {
+	loginStatus := verifyLoginStatus(r)
+	if loginStatus == true {
+		if r.Method == "POST" {
+			successUpdate := false
+			/*
+			cu, _ := r.Cookie("username")
+			unFormatOK := filterUsername(cu.Value)
+			if unFormatOK == true {
+				UID, getUIDOK := getUIDByUsername(cu.Value)
+				catchFalse(getUIDOK, "get uid by username err")
+				storeDescribeOK, recordID := storeRecord(UID, r)
+				photoQuantity := len(r.MultipartForm.File["photos"])
+				if storeDescribeOK == true && photoQuantity == 0 {
+					successUpdate = true
+				} else if storeDescribeOK == true && photoQuantity != 0 {
+					storePhotoOK := storeRecordPhoto(r, UID, recordID)
+					if storePhotoOK == true {
+						successUpdate = true
+					}
+				}
+			}
+			*/
+			successUpdate = alterRecordByRecordID(r)
+
+			p := UploadPage{UploadStatus: successUpdate}
+			b, _ := json.Marshal(p)
+			w.Write(b)
+		}
+	}
 }	
 
-func deleteRecordByRecordID() {
-
+//舊的刪除 上傳新的 綁新的
+func updateRecordPhotosByRecordID() {
+	
 }
+
+func deleteRecordByRecordID(w http.ResponseWriter, r *http.Request) {
+	loginStatus := verifyLoginStatus(r)
+	if loginStatus == true {
+		if r.Method == "POST" {
+			r.ParseForm()
+			removeRecordByRecordID(r.Form.Get("recordid"))
+			// need return json tall ok or not, and ajax reload
+		}
+	}
+}
+
+func deleteRecordPhotosByPhotoID() {
+	
+}
+	
 
 func parseCoordinateString(val string) float64 {
 	chunks := strings.Split(val, ",")

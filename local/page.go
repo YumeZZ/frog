@@ -16,7 +16,19 @@ func initDynamic(w http.ResponseWriter, r *http.Request) {
 }
 
 func initIndex(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "index.html", nil)
+	loginStatus := verifyLoginStatus(r)
+	if loginStatus == true {
+		if r.Method == "GET" {
+			l := loadPrivateIndexData(w, r)
+			renderTemplate(w, "i.html", l)
+		} else if r.Method == "POST" {
+
+		}
+	} else if loginStatus == false {
+		if r.Method == "GET" {
+			renderTemplate(w, "index.html", nil)
+		}
+	}
 }
 
 func initLoginPage(w http.ResponseWriter, r *http.Request) {

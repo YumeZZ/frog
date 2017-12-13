@@ -68,7 +68,7 @@ func searchUsernameByUsername(un string) (string, bool) {
 func searchOrganismNameByOrganismName(organismName string) (string, bool) {
 	var o string
 	exist := false
-	err := db.QueryRow("SELECT organismname FROM ecology WHERE organismname = ?", organismName).Scan(&o)
+	err := db.QueryRow("SELECT organismname FROM record WHERE organismname = ?", organismName).Scan(&o)
 	checkErr(err, "can not get username")
 	if err == nil {
 		exist = true
@@ -80,7 +80,7 @@ func searchGalleryByOrganismName(organismName string) Gallery {
 	fmt.Println(organismName)
 	recordIDs, gallery := []int{}, Gallery{}
 	gallery.Records = make(map[int]Record)
-	idrows, queryErr := db.Query("SELECT id FROM ecology WHERE organismname=?", organismName)
+	idrows, queryErr := db.Query("SELECT id FROM record WHERE organismname=?", organismName)
 	checkErr(queryErr, "query organis id from comment with mysql error")
 	defer idrows.Close()
 	for idrows.Next() {
@@ -90,14 +90,13 @@ func searchGalleryByOrganismName(organismName string) Gallery {
 		recordIDs = append(recordIDs, tmp)
 	}
 
-	// ecology table 有空改 record table, ecologyid 有空改 recordid
 	for index, id := range recordIDs {
 		name, food, stage, season, note := "", "", "", "", ""
-		db.QueryRow("SELECT organismname FROM ecology WHERE id = ?", id).Scan(&name)
-		db.QueryRow("SELECT food FROM ecology WHERE id = ?", id).Scan(&food)
-		db.QueryRow("SELECT stage FROM ecology WHERE id = ?", id).Scan(&stage)
-		db.QueryRow("SELECT season FROM ecology WHERE id = ?", id).Scan(&season)
-		db.QueryRow("SELECT note FROM ecology WHERE id = ?", id).Scan(&note)
+		db.QueryRow("SELECT organismname FROM record WHERE id = ?", id).Scan(&name)
+		db.QueryRow("SELECT food FROM record WHERE id = ?", id).Scan(&food)
+		db.QueryRow("SELECT stage FROM record WHERE id = ?", id).Scan(&stage)
+		db.QueryRow("SELECT season FROM record WHERE id = ?", id).Scan(&season)
+		db.QueryRow("SELECT note FROM record WHERE id = ?", id).Scan(&note)
 
 		r:=Record{
 			ID: id,
@@ -107,7 +106,7 @@ func searchGalleryByOrganismName(organismName string) Gallery {
 			Season: season,	
 			Note: note}
 		r.Photo = make(map[int]string)
-		idrows, queryErr := db.Query("SELECT path FROM photo WHERE ecologyid = ?", id)
+		idrows, queryErr := db.Query("SELECT path FROM photo WHERE recordid = ?", id)
 		checkErr(queryErr, "query photo path from comment with mysql error")
 		defer idrows.Close()
 		i := 0
@@ -124,24 +123,24 @@ func searchGalleryByOrganismName(organismName string) Gallery {
 }
 
 func storeRecord(UID string, r *http.Request) (bool, string) {
-	successStore, ecologyID := false, ""
+	successStore, recordID := false, ""
 	r.ParseMultipartForm(32 << 20)
 
 	organismName := r.Form.Get("organismname")
 
-	result, storeRecordErr := db.Exec("INSERT INTO ecology SET userid=?, organismname=?, createtime=CURRENT_TIMESTAMP", UID, organismName)
+	result, storeRecordErr := db.Exec("INSERT INTO record SET userid=?, organismname=?, createtime=CURRENT_TIMESTAMP", UID, organismName)
 	checkErr(storeRecordErr, "store record err")
 	if storeRecordErr == nil {
-		id, getEcologyIDErr := result.LastInsertId()
-		checkErr(getEcologyIDErr, "get record id err")
-		ecologyID = strconv.FormatInt(id, 10)
-		if getEcologyIDErr == nil {
+		id, getRecordIDErr := result.LastInsertId()
+		checkErr(getRecordIDErr, "get record id err")
+		recordID = strconv.FormatInt(id, 10)
+		if getRecordIDErr == nil {
 			for key, values := range r.Form {
 				if key != "organismname" {
 					for _, value := range values {
-						updateCommand := "UPDATE ecology SET " + key + "=?" + " WHERE id=?"
+						updateCommand := "UPDATE record SET " + key + "=?" + " WHERE id=?"
 						// when value quantity == 1, can do this
-						_, updateErr :=db.Exec(updateCommand, value, ecologyID)
+						_, updateErr :=db.Exec(updateCommand, value, recordID)
 						if updateErr != nil {
 							fmt.Println(updateErr)
 						}
@@ -151,10 +150,10 @@ func storeRecord(UID string, r *http.Request) (bool, string) {
 			successStore = true
 		}
 	}
-	return successStore, ecologyID
+	return successStore, recordID
 }
 
-func storeRecordPhoto(r *http.Request, UID string, ecologyID string) bool {
+func storeRecordPhoto(r *http.Request, UID string, recordID string) bool {
 	successStore := false
 	m := r.MultipartForm
 	photos := m.File["photos"]
@@ -179,7 +178,7 @@ func storeRecordPhoto(r *http.Request, UID string, ecologyID string) bool {
 
 		if copyErr == nil {
 			if decodeErr != nil {
-				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, ecologyid=?, initorder=?, path=?, name=?, createtime=CURRENT_TIMESTAMP", UID, ecologyID, index, photoPath, photo.Filename)
+				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, recordid=?, initorder=?, path=?, name=?, createtime=CURRENT_TIMESTAMP", UID, recordID, index, photoPath, photo.Filename)
 				checkErr(storeRecordPhotoErr, "store record photo err")
 				if storeRecordPhotoErr == nil {
 					successStore = true
@@ -194,7 +193,7 @@ func storeRecordPhoto(r *http.Request, UID string, ecologyID string) bool {
 				longitude := ""
 				latitude, longitude = parseCoordinate(latitudeValue, latitudePosition, longitudeValue, longitudePosition)
 
-				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, ecologyid=?, initorder=?, path=?, name=?, longitude=?, latitude=?, createtime=CURRENT_TIMESTAMP", UID, ecologyID, index, photoPath, photo.Filename, longitude, latitude)
+				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, recordid=?, initorder=?, path=?, name=?, longitude=?, latitude=?, createtime=CURRENT_TIMESTAMP", UID, recordID, index, photoPath, photo.Filename, longitude, latitude)
 				checkErr(storeRecordPhotoErr, "store record photo err")
 				if storeRecordPhotoErr == nil {
 					successStore = true
@@ -206,8 +205,119 @@ func storeRecordPhoto(r *http.Request, UID string, ecologyID string) bool {
 	return successStore
 }
 
+func addPhotosToRecordByRecordID(r *http.Request, UID string) bool {
+	addSucccess:=false
+	m := r.MultipartForm
+	recordID := r.Form.Get("recordid")
+	photos := m.File["photos"]
+	for index, photo := range photos {
+		source, openPhotoFileErr := photo.Open()
+		defer source.Close()
+		checkErr(openPhotoFileErr, "open photo file err")
+
+		randString := newRandomString(50)
+		photoExt := filepath.Ext(photo.Filename)
+		photoPath := randString + photoExt
+
+		destination, createPhotoFileErr := os.Create(frogConfig.StoragePath + "photo/" + photoPath)
+		defer destination.Close()
+		checkErr(createPhotoFileErr, "create photo file err")
+
+		_, copyErr := io.Copy(destination, source)
+		checkErr(copyErr, "copy photo file err")
+
+		data, decodeErr := exif.Read(frogConfig.StoragePath + "photo/" + photoPath)
+		checkWarn(decodeErr, "decode photo err")
+
+		if copyErr == nil {
+			if decodeErr != nil {
+				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, recordid=?, initorder=?, path=?, name=?, createtime=CURRENT_TIMESTAMP", UID, recordID, index, photoPath, photo.Filename)
+				checkErr(storeRecordPhotoErr, "store record photo err")
+				if storeRecordPhotoErr == nil {
+					addSucccess = true
+				}
+			} else {
+				latitudePosition := data.Tags["North or South Latitude"]
+				longitudePosition := data.Tags["East or West Longitude"]
+				latitudeValue := data.Tags["Latitude"]
+				longitudeValue := data.Tags["Longitude"]
+
+				latitude := ""
+				longitude := ""
+				latitude, longitude = parseCoordinate(latitudeValue, latitudePosition, longitudeValue, longitudePosition)
+
+				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, recordid=?, initorder=?, path=?, name=?, longitude=?, latitude=?, createtime=CURRENT_TIMESTAMP", UID, recordID, index, photoPath, photo.Filename, longitude, latitude)
+				checkErr(storeRecordPhotoErr, "store record photo err")
+				if storeRecordPhotoErr == nil {
+					addSucccess = true
+				}
+
+			}
+		}
+	}
+	return addSucccess
+}
+
 func getRecordByRecordID(recordID string) Record {
-	r:=Record{}
+	name, food, stage, season, note := "", "", "", "", ""
+	db.QueryRow("SELECT organismname FROM record WHERE id = ?", recordID).Scan(&name)
+	db.QueryRow("SELECT food FROM record WHERE id = ?", recordID).Scan(&food)
+	db.QueryRow("SELECT stage FROM record WHERE id = ?", recordID).Scan(&stage)
+	db.QueryRow("SELECT season FROM record WHERE id = ?", recordID).Scan(&season)
+	db.QueryRow("SELECT note FROM record WHERE id = ?", recordID).Scan(&note)
+	id, _ := strconv.Atoi(recordID)
+	r:=Record{
+		ID: id,
+		Name: name,
+		Food: food,
+		Stage: stage,
+		Season: season,	
+		Note: note}
+	r.Photo = make(map[int]string)
+	idrows, queryErr := db.Query("SELECT path FROM photo WHERE recordid = ?", recordID)
+	checkErr(queryErr, "query photo path from comment with mysql error")
+	defer idrows.Close()
+	i := 0
+	for idrows.Next() {
+		var tmp string
+		scanErr := idrows.Scan(&tmp)
+		checkErr(scanErr, "scan photo path from comment with mysql error")
+		r.Photo[i] = tmp
+		i++
+	}
 	return r
+}
+
+func alterRecordByRecordID(r *http.Request) bool {
+	successAlter := true
+	r.ParseMultipartForm(32 << 20)
+	recordID := r.Form.Get("recordid")
+	for key, values := range r.Form {
+		for _, value := range values {
+			updateCommand := "UPDATE record SET " + key + "=?" + " WHERE id=?"
+			// when value quantity == 1, can do this
+			_, updateErr :=db.Exec(updateCommand, value, recordID)
+			if updateErr != nil {
+				successAlter = false
+			}
+		}
+	}
+	return successAlter
+}
+
+func alterRecordPhotoByRecordID(r *http.Request) bool {
+	successAlter := true
+
+	return successAlter	
+}
+
+func removeRecordByRecordID(recordID string) bool {
+	successDelete := false
+	_, deleteRecordWithMysqlErr := db.Exec("DELETE FROM record WHERE id=?", recordID)
+	checkErr(deleteRecordWithMysqlErr, "deleteRecordWithMysqlErr")
+	if deleteRecordWithMysqlErr == nil {
+		successDelete = true
+	}
+	return successDelete
 }
 
