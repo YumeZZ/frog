@@ -58,7 +58,7 @@ func main() {
 
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir(frogConfig.PublicPath))))
 	mux.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir(frogConfig.ResourcePath))))
-
+	mux.Handle("/storage/", http.StripPrefix("/storage/", http.FileServer(http.Dir(frogConfig.StoragePath))))
 	err := http.ListenAndServe(":80", mux)
 	checkErr(err, "ListenAndServe err")
 }

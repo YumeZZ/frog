@@ -31,6 +31,8 @@ $("#search-form").submit(function(e) {
     e.preventDefault();
     var formURL = $(this).attr("action");
     var formData = $(this).serializeArray();
+
+    
     //console.log(formData);
     $.ajax({
         url : formURL,
@@ -39,11 +41,18 @@ $("#search-form").submit(function(e) {
         success:function(data, textStatus, jqXHR) {
             var result = $.parseJSON(data);
             //console.log(result.Records);
-            
+
+            $('.search-result').empty();
+
+            searchResultHTML = '';
             jQuery.each(result.Records, function(i, val) {
                 console.log(i, val);
+                //console.log(result.Records[0].ID);
+                //console.log(result.Records[0].Photo[0]);
+                searchResultHTML += '<img ' + 'class="albumimg"' + 'id="' + result.Records[i].ID +'"' + ' ' + 'src="' + '/storage/photo/' + result.Records[i].Photo[0] + '" />';
             });
-            
+            $('.search-result').prepend(searchResultHTML);
+
             //$(location).attr('href', '/');
         },
         error: function(jqXHR, textStatus, errorThrown) {

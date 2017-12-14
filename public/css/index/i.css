@@ -1,3 +1,20 @@
 .display-none {
     display: none;
 }
+
+.search-result {
+    max-width: 1000px;
+    flex-wrap: wrap;
+    align-self: center;
+}
+
+.search-result img {
+    max-width: 448px;
+    max-height: 252px;
+    margin: 5px;
+}
+
+
+.search-result img:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
