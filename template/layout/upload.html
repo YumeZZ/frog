@@ -61,8 +61,88 @@
                                     <input type="text" id="species" name="species">
                                     -->
                                     
-                                    <label for="recorddate">發現日期</label>
-                                    <input type="date" id="recorddate" name="recorddate">
+                                    <!--
+                                    <label for="isanimal">打勾的話 代表是植物 非動物 沒勾默認是動物</label>
+                                    <input type="checkbox" name="isplant" value="true">
+                                    -->
+                                    
+                                    <label for="categorytagchinese">中文類別標籤</label>
+                                    <input type="text" id="categorytagchinese" name="categorytagchinese"><br/>
+                                    
+                                    <label for="categorytagenglish">英文類別標籤</label>
+                                    <input type="text" id="categorytagenglish" name="categorytagenglish"><br/>
+                                    
+                                    
+                                    <!-- 英文版有空再說 -->
+                                    界：<br/>
+                                    <select name="kingdom">
+                                      <option value="動物界">動物界</option>
+                                      <option value="植物界">植物界</option>
+                                      <option value="外星生物">外星生物</option>
+                                    </select><br/>
+                                    
+                                    門：<br/>
+                                    <select name="phylum">
+                                        <option value="脊索動物門">脊索動物門</option>
+                                        <option value="節肢動物門">節肢動物門</option>
+                                        <option value="反正不是動物">反正不是動物</option>
+                                    </select><br/>
+                                    
+                                    綱：<br/>
+                                    <select name="class">
+                                        <option value="兩棲綱">兩棲綱</option>
+                                        <option value="昆蟲綱"></option>
+                                        <option value="反正不是動物">反正不是動物</option>
+                                    </select><br/>
+                                    
+                                    目：<br/>
+                                    <select name="order">
+                                        <option value="無尾目">無尾目</option>
+                                        <option value="鱗翅目">鱗翅目</option>
+                                        <option value="反正不是動物">反正不是動物</option>
+                                    </select><br/>
+                                    
+                                    科：<br/>
+                                    <select name="family">
+                                        <option value="叉舌蛙科">叉舌蛙科</option>
+                                        <option value="彩蛙科">彩蛙科</option>
+                                        <option value="樹蛙科">樹蛙科</option>
+                                        <option value="樹蟾科">樹蟾科</option>
+                                        <option value="狹口蛙科">狹口蛙科</option>
+                                        <option value="盤舌蟾科">盤舌蟾科</option>
+                                        <option value="細趾蟾科">細趾蟾科</option>
+                                        <option value="蟾蜍科">蟾蜍科</option>
+                                        <option value="赤蛙科">赤蛙科</option>
+                                    </select><br/>
+                                    
+                                    屬：<br/>
+                                    <select name="genus">
+
+                                    </select><br/>
+                                    
+                                    種：<br/>
+                                    <select name="species">
+
+                                    </select><br/>                                    
+                                    
+                                    年齡狀態：<br/>
+                                    <select name="stage">
+                                        <option value="幼年">幼年</option>
+                                        <option value="中年">中年</option>
+                                        <option value="老年">老年</option>
+                                    </select><br/>
+                                    
+                                    年齡狀態：<br/>
+                                    <select name="stage">
+                                        <option value="幼年">幼年</option>
+                                        <option value="中年">中年</option>
+                                        <option value="老年">老年</option>
+                                    </select><br/>
+                                    
+                                    season 出沒季節：？？？ 這個是根據幾號到幾號 還是 春夏秋冬 春夏 夏秋 秋冬 ......<br/>
+                                    
+                                    <label for="recorddate">發現該生物的日期 沒有的話 以照片的exif為準 沒照片或沒exif就留空</label>
+                                    <input type="date" id="recorddate" name="recorddate"><br/>
                                     
                                     性狀簡述<br/>
                                     <textarea name="note"></textarea><br/>

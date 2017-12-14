@@ -1,5 +1,5 @@
 ﻿CREATE TABLE `userinfo` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `username` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
@@ -14,22 +14,11 @@
   `religion` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
   `vegetarian` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `createtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(id),
+  UNIQUE KEY(username),
+  UNIQUE KEY(email),
+  UNIQUE KEY(phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-ALTER TABLE `userinfo`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `phone` (`phone`);
-
-
-ALTER TABLE `userinfo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
-
-testun-mail@gmail.com
-testun
-hellopw2017
+insert into userinfo(username,password) values('testun','hellopw2017');

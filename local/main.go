@@ -47,7 +47,7 @@ func main() {
 
 	mux.HandleFunc("/test", initTestPage)
 	mux.HandleFunc("/posttest", test)
-	
+
 	mux.HandleFunc("/requestregister", register)
 	mux.HandleFunc("/requestforgot", forgot)
 	mux.HandleFunc("/requestlogin", login)

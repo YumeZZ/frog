@@ -85,7 +85,7 @@ func searchRecordsByOrganismName(organismName string) Records {
 		db.QueryRow("SELECT stage FROM record WHERE id = ?", id).Scan(&stage)
 		db.QueryRow("SELECT season FROM record WHERE id = ?", id).Scan(&season)
 		db.QueryRow("SELECT note FROM record WHERE id = ?", id).Scan(&note)
-		
+
 		r := Record{
 			ID:     id,
 			Name:   name,
@@ -102,11 +102,11 @@ func searchRecordsByOrganismName(organismName string) Records {
 			var tmp string
 			scanErr := pathRows.Scan(&tmp)
 			checkErr(scanErr, "scan photo path from comment with mysql error")
-			
+
 			r.PhotoSrc[i] = tmp
 			i++
 		}
-		
+
 		r.PhotoLatitude = make(map[int]string)
 		latitudeRows, queryErr := db.Query("SELECT latitude FROM photo WHERE recordid = ?", id)
 		checkErr(queryErr, "query photo latitude from comment with mysql error")
@@ -422,6 +422,8 @@ func storeRecordPhoto(r *http.Request, UID string, recordID string) bool {
 		defer source.Close()
 		checkErr(openPhotoFileErr, "open photo file err")
 
+		fmt.Println("filename:", photo.Filename, " bytes:", photo.Size)
+
 		randString := newRandomString(50)
 		photoExt := filepath.Ext(photo.Filename)
 		photoPath := randString + photoExt
@@ -445,16 +447,16 @@ func storeRecordPhoto(r *http.Request, UID string, recordID string) bool {
 				}
 			} else {
 				/*
-				for key, value := range data.Tags {
-					fmt.Println(key, "=", value)
-				}
+					for key, value := range data.Tags {
+						fmt.Println(key, "=", value)
+					}
 				*/
 				latitudePosition := data.Tags["North or South Latitude"]
 				longitudePosition := data.Tags["East or West Longitude"]
-				latitudeValue := data.Tags["Latitude"] //緯度
+				latitudeValue := data.Tags["Latitude"]   //緯度
 				longitudeValue := data.Tags["Longitude"] //經度
 				//altitude := data.Tags["Altitude"]	海拔
-				//GPSDate := data.Tags["GPS Date"] 好像沒有加八小時
+				//GPSDate := data.Tags["GPS Date"] 好像沒有加八小時 應該是要配合time.Time處理後再存到mysqle跟更新exif
 
 				latitude := ""
 				longitude := ""
