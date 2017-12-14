@@ -79,3 +79,7 @@ func initGalleryPage(w http.ResponseWriter, r *http.Request) {
 func initTestPage(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "test.html", nil)
 }
+
+func test(w http.ResponseWriter, r *http.Request) {
+
+}

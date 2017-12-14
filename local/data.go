@@ -42,7 +42,9 @@ type Record struct {
 	Season   string
 	Note     string
 	Habitat  string
-	Photo    map[int]string // index, photo path
+	PhotoSrc    map[int]string // index, photo path
+	PhotoLatitude    map[int]string // index, photo latitude
+	PhotoLongitude    map[int]string // index, photo longitude
 }
 
 // Records .

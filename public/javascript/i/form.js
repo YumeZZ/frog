@@ -46,10 +46,16 @@ $("#search-form").submit(function(e) {
 
             searchResultHTML = '';
             jQuery.each(result.Records, function(i, val) {
-                console.log(i, val);
+                //console.log(i, val);
                 //console.log(result.Records[0].ID);
-                //console.log(result.Records[0].Photo[0]);
-                searchResultHTML += '<img ' + 'class="albumimg"' + 'id="' + result.Records[i].ID +'"' + ' ' + 'src="' + '/storage/photo/' + result.Records[i].Photo[0] + '" />';
+                //console.log(result.Records[0].PhotoSrc[0]);
+                console.log(result.Records[0].PhotoSrc[0]);
+                console.log(result.Records[0].PhotoLatitude[0]);
+                console.log(result.Records[0].PhotoLongitude[0]);
+                
+                /* PhotoLatitude undefined 還沒處理 if (typeof myVar != 'undefined')  */
+                
+                searchResultHTML += '<img ' + 'class="albumimg"' + 'id="' + result.Records[i].ID +'"' + ' ' + 'src="' + '/storage/photo/' + result.Records[i].PhotoSrc[0] + '" />';
             });
             $('.search-result').prepend(searchResultHTML);
 
