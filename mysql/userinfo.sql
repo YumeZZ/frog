@@ -21,4 +21,8 @@
   UNIQUE KEY(phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-insert into userinfo(username,password) values('testun','hellopw2017');
+insert into userinfo(username,password) values('testun','68656c6c6f70773230313708a2f8c9e2fce8e8eb5f181ee569ed836b9d4dfb4e0fbbed24d816b8e0549f2de004ebba08ed4f5fbd463fe390bd827e9b496c109f26440fb942cd20f3a3579a');
+
+/*
+hellopw2017
+*/

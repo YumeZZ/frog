@@ -51,6 +51,7 @@ func storeSession(w http.ResponseWriter, r *http.Request, un string, pw string) 
 	hashSess = newHashSession(un)
 	rdb.Do("HSET", un, "session", hashSess)
 	sess, getSessionErr := redis.String(rdb.Do("HGET", un, "session"))
+	//fmt.Println(sess)
 	checkErr(getSessionErr, "get session from redis err")
 	if sess == hashSess {
 		setCookie("username", un, 0, 0, 1, w, r)
@@ -63,6 +64,7 @@ func storeSession(w http.ResponseWriter, r *http.Request, un string, pw string) 
 func getSession(un string) (bool, string) {
 	exist := false
 	sess, getSessionErr := redis.String(rdb.Do("HGET", un, "session"))
+	//fmt.Println(sess)
 	checkErr(getSessionErr, "get session from redis err")
 	if getSessionErr == nil {
 		exist = true
@@ -142,6 +144,7 @@ func verifyPasswordByUsername(username, password string) bool {
 	serverHashPW, exist := getPasswordByUsername(username)
 	if exist == true {
 		clientHashPW := newHashPassword(password)
+		//fmt.Println(clientHashPW)
 		if clientHashPW == serverHashPW {
 			truePassword = true
 		}

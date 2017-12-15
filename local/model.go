@@ -387,7 +387,6 @@ func storeRecord(UID string, r *http.Request) (bool, string) {
 	r.ParseMultipartForm(32 << 20)
 
 	organismName := r.Form.Get("organismname")
-
 	result, storeRecordErr := db.Exec("INSERT INTO record SET userid=?, organismname=?, createtime=CURRENT_TIMESTAMP", UID, organismName)
 	checkErr(storeRecordErr, "store record err")
 	if storeRecordErr == nil {
@@ -398,7 +397,9 @@ func storeRecord(UID string, r *http.Request) (bool, string) {
 			for key, values := range r.Form {
 				if key != "organismname" {
 					for _, value := range values {
-						updateCommand := "UPDATE record SET " + key + "=?" + " WHERE id=?"
+						//need fix
+						updateCommand := "UPDATE record SET `" + key + "`=?" + " WHERE id=?"
+						fmt.Println(updateCommand)
 						// when value quantity == 1, can do this
 						_, updateErr := db.Exec(updateCommand, value, recordID)
 						if updateErr != nil {
@@ -414,6 +415,7 @@ func storeRecord(UID string, r *http.Request) (bool, string) {
 }
 
 func storeRecordPhoto(r *http.Request, UID string, recordID string) bool {
+	fmt.Println("storeRecordPhoto:")
 	successStore := false
 	m := r.MultipartForm
 	photos := m.File["photos"]
@@ -421,6 +423,7 @@ func storeRecordPhoto(r *http.Request, UID string, recordID string) bool {
 		source, openPhotoFileErr := photo.Open()
 		defer source.Close()
 		checkErr(openPhotoFileErr, "open photo file err")
+		fmt.Println("openPhotoFileErr:", openPhotoFileErr)
 
 		fmt.Println("filename:", photo.Filename, " bytes:", photo.Size)
 
@@ -434,9 +437,11 @@ func storeRecordPhoto(r *http.Request, UID string, recordID string) bool {
 
 		_, copyErr := io.Copy(destination, source)
 		checkErr(copyErr, "copy photo file err")
+		fmt.Println("copyErr", copyErr)
 
 		data, decodeErr := exif.Read(frogConfig.StoragePath + "photo/" + photoPath)
-		checkWarn(decodeErr, "decode photo err")
+		checkWarn(decodeErr, "decode photo exif err")
+		fmt.Println("decodeErr", decodeErr)
 
 		if copyErr == nil {
 			if decodeErr != nil {
@@ -446,23 +451,26 @@ func storeRecordPhoto(r *http.Request, UID string, recordID string) bool {
 					successStore = true
 				}
 			} else {
-				/*
-					for key, value := range data.Tags {
-						fmt.Println(key, "=", value)
-					}
-				*/
+				for key, value := range data.Tags {
+					fmt.Println(key, "=", value)
+				}
+
 				latitudePosition := data.Tags["North or South Latitude"]
 				longitudePosition := data.Tags["East or West Longitude"]
 				latitudeValue := data.Tags["Latitude"]   //緯度
 				longitudeValue := data.Tags["Longitude"] //經度
-				//altitude := data.Tags["Altitude"]	海拔
-				//GPSDate := data.Tags["GPS Date"] 好像沒有加八小時 應該是要配合time.Time處理後再存到mysqle跟更新exif
+				altitude := data.Tags["Altitude"]        //海拔
+				dateAndTime := data.Tags["Date and Time"]
+				//GPSDate := data.Tags["GPS Date"] 慢八小時
+				charsDateAndTime := []rune(dateAndTime)
+				charsDateAndTime[4], charsDateAndTime[7] = '-', '-'
+				dateAndTime = string(charsDateAndTime)
 
 				latitude := ""
 				longitude := ""
 				latitude, longitude = parseCoordinate(latitudeValue, latitudePosition, longitudeValue, longitudePosition)
 
-				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, recordid=?, initorder=?, path=?, name=?, longitude=?, latitude=?, createtime=CURRENT_TIMESTAMP", UID, recordID, index, photoPath, photo.Filename, longitude, latitude)
+				_, storeRecordPhotoErr := db.Exec("INSERT INTO photo SET userid=?, recordid=?, initorder=?, path=?, name=?, longitude=?, latitude=?, altitude=?, shootdatetime=?, createtime=CURRENT_TIMESTAMP", UID, recordID, index, photoPath, photo.Filename, longitude, latitude, altitude, dateAndTime)
 				checkErr(storeRecordPhotoErr, "store record photo err")
 				if storeRecordPhotoErr == nil {
 					successStore = true
@@ -496,7 +504,7 @@ func addPhotosToRecordByRecordID(r *http.Request, UID string) bool {
 		checkErr(copyErr, "copy photo file err")
 
 		data, decodeErr := exif.Read(frogConfig.StoragePath + "photo/" + photoPath)
-		checkWarn(decodeErr, "decode photo err")
+		checkWarn(decodeErr, "decode photo exif err")
 
 		if copyErr == nil {
 			if decodeErr != nil {

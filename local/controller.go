@@ -38,6 +38,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			loginField := r.FormValue("account")
 			pw := r.FormValue("password")
 			isMail := classifyLoginField(loginField)
+			//fmt.Println(loginField, pw)
 			if isMail == true {
 
 			} else {
@@ -123,10 +124,13 @@ func uploadRecord(w http.ResponseWriter, r *http.Request) {
 				UID, getUIDOK := getUIDByUsername(cu.Value)
 				catchFalse(getUIDOK, "get uid by username err")
 				storeDescribeOK, recordID := storeRecord(UID, r)
+				fmt.Println("storeDescribeOK, recordID", storeDescribeOK, recordID)
+				//error len(r.MultipartForm.File["photos"])
 				photoQuantity := len(r.MultipartForm.File["photos"])
 				if storeDescribeOK == true && photoQuantity == 0 {
 					successUpload = true
 				} else if storeDescribeOK == true && photoQuantity != 0 {
+					fmt.Println("photoQuantity", photoQuantity)
 					storePhotoOK := storeRecordPhoto(r, UID, recordID)
 					if storePhotoOK == true {
 						successUpload = true
