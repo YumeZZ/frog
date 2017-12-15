@@ -1,22 +1,26 @@
 package main
 
 import "github.com/importfmt/logger"
+import "fmt"
 
 func checkErr(err error, message string) {
 	if err != nil {
 		logger.Error.Println(message)
+		fmt.Println(err)
 	}
 }
 
 func checkWarn(err error, message string) {
 	if err != nil {
 		logger.Warning.Println(message)
+		fmt.Println(err)		
 	}
 }
 
 func checkInfo(err error, message string) {
 	if err != nil {
 		logger.Info.Println(message)
+		fmt.Println(err)		
 	}
 }
 

@@ -123,19 +123,7 @@ func uploadRecord(w http.ResponseWriter, r *http.Request) {
 			if unFormatOK == true {
 				UID, getUIDOK := getUIDByUsername(cu.Value)
 				catchFalse(getUIDOK, "get uid by username err")
-				storeDescribeOK, recordID := storeRecord(UID, r)
-				fmt.Println("storeDescribeOK, recordID", storeDescribeOK, recordID)
-				//error len(r.MultipartForm.File["photos"])
-				photoQuantity := len(r.MultipartForm.File["photos"])
-				if storeDescribeOK == true && photoQuantity == 0 {
-					successUpload = true
-				} else if storeDescribeOK == true && photoQuantity != 0 {
-					fmt.Println("photoQuantity", photoQuantity)
-					storePhotoOK := storeRecordPhoto(r, UID, recordID)
-					if storePhotoOK == true {
-						successUpload = true
-					}
-				}
+				successUpload = storeRecord(UID, r)
 			}
 			p := UploadPage{UploadStatus: successUpload}
 			b, _ := json.Marshal(p)
@@ -148,24 +136,6 @@ func uploadRecordPhotosByRecordID(w http.ResponseWriter, r *http.Request) {
 	loginStatus := verifyLoginStatus(r)
 	if loginStatus == true {
 		if r.Method == "POST" {
-			successUpload := false
-			photoQuantity := len(r.MultipartForm.File["photos"])
-			if photoQuantity != 0 {
-				cu, _ := r.Cookie("username")
-				unFormatOK := filterUsername(cu.Value)
-				if unFormatOK == true {
-					UID, getUIDOK := getUIDByUsername(cu.Value)
-					if getUIDOK == true {
-						uploadOK := addPhotosToRecordByRecordID(r, UID)
-						if uploadOK == true {
-							successUpload = true
-						}
-					}
-				}
-			}
-			p := UploadPage{UploadStatus: successUpload}
-			b, _ := json.Marshal(p)
-			w.Write(b)
 		}
 	}
 }

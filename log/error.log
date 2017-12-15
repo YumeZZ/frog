@@ -160,3 +160,11 @@
 [Error] 2017/12/15 08:12:21 error.go:7: get session from redis err
 [Error] 2017/12/15 08:12:21 error.go:7: get session from redis err
 [Error] 2017/12/15 08:12:21 error.go:7: get session from redis err
+[Error] 2017/12/15 11:24:42 error.go:7: get session from redis err
+[Error] 2017/12/15 11:24:42 error.go:7: get session from redis err
+[Error] 2017/12/15 11:24:42 error.go:7: get session from redis err
+[Error] 2017/12/15 11:24:44 error.go:7: get session from redis err
+[Error] 2017/12/15 11:24:44 error.go:7: get session from redis err
+[Error] 2017/12/15 11:24:44 error.go:7: get session from redis err
+[Error] 2017/12/15 11:24:46 error.go:7: get session from redis err
+[Error] 2017/12/15 11:51:28 error.go:7: store record photo err

@@ -2,9 +2,10 @@ $("#upload-form").submit(function(e) {
     e.preventDefault();
     var formURL = $(this).attr("action");
     var formData = new FormData(this);
+    console.log(formData);
     location.reload();
     $('input[name=organismname]').val('');
-
+    
     $.ajax({
         url : formURL,
         type: "POST",
