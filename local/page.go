@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 )
 
@@ -8,6 +9,8 @@ func initDynamic(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
 		initIndex(w, r)
 	} else if r.URL.Path[0:6] == "/tags/" {
+		initTagPage(w, r)
+	} else if r.URL.Path[0:7] == "/photo/" {
 		initGalleryPage(w, r)
 	} else {
 		http.NotFound(w, r)
@@ -71,9 +74,16 @@ func initCategoryPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func initTagPage(w http.ResponseWriter, r *http.Request) {
+	keyword := r.URL.Path[6 : len(r.URL.Path)]
+	fmt.Println("keyword", keyword)
+	data := searchRecordsByTag(keyword)
+	fmt.Println(data)
+	renderTemplate(w, "tags.html", data)
+}
+
 func initGalleryPage(w http.ResponseWriter, r *http.Request) {
-	//keyword := r.URL.Path[6 : len(r.URL.Path)-1]
-	//renderTemplate(w, "gallery.html", nil)
+
 }
 
 func initTestPage(w http.ResponseWriter, r *http.Request) {

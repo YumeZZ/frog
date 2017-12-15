@@ -65,39 +65,43 @@ func forgot(w http.ResponseWriter, r *http.Request) {
 }
 
 func searchRecordsByKeyword(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	searchtype := r.FormValue("searchtype")
-	keyword := r.FormValue("keyword")
-	switch searchtype {
-	case "organismname":
-		records := searchRecordsByOrganismName(keyword)
-		b, _ := json.Marshal(records)
-		w.Write(b)
-	case "category":
-		records := searchRecordsByCategory(keyword)
-		b, _ := json.Marshal(records)
-		w.Write(b)
-	case "locationname":
-		records := searchRecordsByLocationName(keyword)
-		b, _ := json.Marshal(records)
-		w.Write(b)
-	case "gps":
-		longitude := r.FormValue("longitude")
-		latitude := r.FormValue("latitude")
-		records := searchRecordsByGPS(longitude, latitude)
-		b, _ := json.Marshal(records)
-		w.Write(b)
-	case "season":
-		records := searchRecordsBySeason(keyword)
-		b, _ := json.Marshal(records)
-		w.Write(b)
-	case "daterange":
-		datefrom := r.FormValue("datefrom")
-		dateto := r.FormValue("dateto")
-		records := searchRecordsByDateRange(datefrom, dateto)
-		fmt.Println(records)
-		b, _ := json.Marshal(records)
-		w.Write(b)
+	logined := verifyLoginStatus(r)
+	if r.Method == "POST" && logined == true {
+		r.ParseForm()
+		//fmt.Println(r.Form)
+		searchtype := r.FormValue("searchtype")
+		keyword := r.FormValue("keyword")
+		switch searchtype {
+		case "organismname":
+			records := searchRecordsByOrganismName(keyword)
+			b, _ := json.Marshal(records)
+			w.Write(b)
+		case "category":
+			records := searchRecordsByCategory(keyword)
+			b, _ := json.Marshal(records)
+			w.Write(b)
+		case "locationname":
+			records := searchRecordsByLocationName(keyword)
+			b, _ := json.Marshal(records)
+			w.Write(b)
+		case "gps":
+			longitude := r.FormValue("longitude")
+			latitude := r.FormValue("latitude")
+			records := searchRecordsByGPS(longitude, latitude)
+			b, _ := json.Marshal(records)
+			w.Write(b)
+		case "season":
+			records := searchRecordsBySeason(keyword)
+			b, _ := json.Marshal(records)
+			w.Write(b)
+		case "daterange":
+			datefrom := r.FormValue("datefrom")
+			dateto := r.FormValue("dateto")
+			records := searchRecordsByDateRange(datefrom, dateto)
+			fmt.Println(records)
+			b, _ := json.Marshal(records)
+			w.Write(b)
+		}
 	}
 }
 

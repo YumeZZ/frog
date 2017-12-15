@@ -10,24 +10,47 @@
     </head>
     <body>
         <div class="container">
-            <div class="top"></div>
+            <div class="top">
+                <div class="nav">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li class="dropdown">
+                            <a href="javascript:void(0)" class="dropbtn">Tag</a>
+                            <div class="dropdown-content">
+                                <a href="/tags/frog">青蛙</a>
+                                <a href="/tags/butterfly">蝴蝶</a>
+                                <a href="/tags/plant">植物</a>
+                            </div>
+                        </li>
+                        <li class="dropdown">
+                            <a href="javascript:void(0)" class="dropbtn">Photo</a>
+                            <div class="dropdown-content">
+                                <a href="/photo/frog">青蛙</a>
+                                <a href="/photo/butterfly">蝴蝶</a>
+                                <a href="/photo/plant">植物</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="main">
                 <div class="search">                    
                     <div class="search-container">
                         <form action="/search-records-by-keyword" id="search-form">
                             <input type="text" placeholder="Search..." name="keyword">
+                            <select name="searchtype">
+                              <option value ="organismname" selected="selected">物種</option>
+                              <option value ="category">類別</option>
+                              <option value="season">季節</option>
+                              <option value="gps">GPS</option>
+                            </select>
+                            <!--
                             <label for="datefrom" id="datefrom-label" class="display-none">開始日期</label>
                             <input type="date" name="datefrom" class="display-none">
                             <label for="dateto" id="dateto-label" class="display-none">結束日期</label>
                             <input type="date" name="dateto" class="display-none">
-                            <input type="text" name="searchtype" class="display-none" value="organismname">
+                            -->
                             <button type="submit"><img src="/resource/ionicons/ionicons-2.0.1/png/512/search.png"></button>
-                            <button type="button" id="searchtype-organismname">物種</button>
-                            <button type="button" id="searchtype-category">類別標籤</button>
-                            <!--<button type="button" id="searchtype-location">地點</button>-->
-                            <!--<button type="button" id="searchtype-gps">座標</button>-->
-                            <button type="button" id="searchtype-season">季節</button>
-                            <button type="button" id="searchtype-daterange">日期</button>
                         </form>
                     </div>
                     <!-- search container end-->

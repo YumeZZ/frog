@@ -1,3 +1,4 @@
+/*
 $( "#searchtype-organismname" ).click(function() {
     $('input[name=searchtype]').val('organismname');
 });
@@ -25,8 +26,7 @@ $( "#searchtype-daterange" ).click(function() {
     $('input[name=datefrom]').css("display","inline-flex");
     $('input[name=searchtype]').val('daterange');
 });
-
-
+*/
 $("#search-form").submit(function(e) {
     e.preventDefault();
     var formURL = $(this).attr("action");
